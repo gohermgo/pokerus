@@ -1,1 +1,2 @@
 [workspace]
+members = ["pokerus-core"]
