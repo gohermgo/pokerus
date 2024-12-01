@@ -26,7 +26,7 @@ pub struct OutcomeBundle {
     target: PokemonComponent,
     outcome: Attack,
 }
-fn spawn_attack_bundle(
+fn process_attack_system(
     mut commands: Commands,
     mut query: Query<(
         &PokemonComponent,
