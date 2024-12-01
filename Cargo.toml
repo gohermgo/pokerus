@@ -1,3 +1,7 @@
 [workspace]
 resolver = "2"
 members = ["pokerus-core"]
+exclude = [ "test-log" ]
+[workspace.dependencies]
+log = "0.4.22"
+test-log = { path = "./test-log" }
