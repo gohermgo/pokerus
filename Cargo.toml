@@ -1,7 +1,8 @@
 [workspace]
 resolver = "2"
-members = ["pokerus-core"]
+members = [ "pokerus-bevy","pokerus-core"]
 exclude = [ "test-log" ]
 [workspace.dependencies]
 log = "0.4.22"
 test-log = { path = "./test-log" }
+pokerus-core = { path = "./pokerus-core" }

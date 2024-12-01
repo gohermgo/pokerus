@@ -1,8 +1,12 @@
 #![feature(try_trait_v2, try_trait_v2_residual)]
+#[cfg(not(test))]
+use log::trace;
 use std::{
     cmp::Ordering,
-    ops::{ControlFlow, FromResidual, Neg, Try},
+    ops::{ControlFlow, FromResidual, Neg, SubAssign, Try},
 };
+#[cfg(test)]
+use test_log::trace;
 
 mod num;
 use num::{BoundedPercentage, FullScale, IntoPercentage, Percentage};
@@ -185,6 +189,7 @@ pub struct Stats {
 }
 
 pub struct Pokemon {
+    name: &'static str,
     r#type: Typing,
     stats: Stats,
     known_moves: [Move; 4],
@@ -197,6 +202,19 @@ pub enum AttackOutcome {
 impl Pokemon {
     pub fn can_level_up(&self) -> bool {
         self.stats.lvl.not_at_max() && self.stats.exp.is_at_next_threshold()
+    }
+    pub fn defend_against(&mut self, attack: &AttackOutcome) {
+        match attack {
+            AttackOutcome::Missed => {
+                trace!("Attack missed")
+            }
+            AttackOutcome::DidNotAffect => {
+                trace!("Attack does not affect {}", self.name)
+            }
+            AttackOutcome::Hit(damage) => {
+                self.stats.hp.value.sub_assign(damage.value);
+            }
+        }
     }
     /// Does not reduce move-uses, nor Health.
     pub fn damage_on_attack(&self, attack: &AttackMove, other: &Pokemon) -> AttackOutcome {
@@ -349,25 +367,6 @@ impl BaseType {
         rhs.attacking(self)
     }
 }
-// #[derive(PartialEq)]
-// pub struct SingleType(BaseType);
-// impl Matchup for SingleType {
-//     type Output = f32;
-//     fn attacking_effectiveness(&self, rhs: &Self) -> TypeMatchup<Self::Output> {
-//         if self == rhs {
-//             0.5.into()
-//         } else {
-//             todo!()
-//         }
-//     }
-//     fn defending_effectiveness(&self, rhs: &Self) -> TypeMatchup<Self::Output> {
-//         todo!()
-//     }
-// }
-// pub struct MixedType {
-//     primary: BaseType,
-//     secondary: BaseType,
-// }
 pub fn add(left: u64, right: u64) -> u64 {
     left + right
 }
