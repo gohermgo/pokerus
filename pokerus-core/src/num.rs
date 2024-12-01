@@ -50,6 +50,22 @@ impl<T> BoundedPercentage<T> {
         value.is_bounded().then_some(BoundedPercentage(value))
     }
 }
+impl<T> PartialEq<T> for BoundedPercentage<T>
+where
+    T: PartialEq,
+{
+    fn eq(&self, other: &T) -> bool {
+        self.0.eq(other)
+    }
+}
+impl<T> PartialOrd<T> for BoundedPercentage<T>
+where
+    T: PartialOrd,
+{
+    fn partial_cmp(&self, other: &T) -> Option<Ordering> {
+        self.0.partial_cmp(other)
+    }
+}
 pub trait FullScale {
     fn origin(&self) -> &Self;
     fn origin_cmp(&self) -> Option<Ordering>

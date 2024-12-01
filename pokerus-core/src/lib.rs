@@ -201,7 +201,9 @@ impl Pokemon {
     /// Does not reduce move-uses, nor Health.
     pub fn damage_on_attack(&self, attack: &AttackMove, other: &Pokemon) -> AttackOutcome {
         if let Some(_accuracy) = attack.accuracy.as_ref() {
-            todo!("Calculation of accuracy in terms of missing")
+            if _accuracy < &rand::random() {
+                return AttackOutcome::Missed;
+            }
         };
         let TypeMatchup::Affected(effectiveness) =
             self.r#type.attacking_effectiveness(&other.r#type)
